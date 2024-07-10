@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../../shared/catchAsync';
+import sendResponse from '../../../shared/sendResponse';
 import { AuthService } from './auth.service';
 
 const verifyEmail = catchAsync(async (req: Request, res: Response) => {
   const { ...verifyData } = req.body;
-  const result = await AuthService.verifyEmailToDB(verifyData);
+  await AuthService.verifyEmailToDB(verifyData);
 
-  res.status(200).json({
+  sendResponse(res, {
     success: true,
-    message: 'Email verified successfully',
-    data: result,
+    statusCode: StatusCodes.OK,
+    message: 'Email verify successfully',
   });
 });
 

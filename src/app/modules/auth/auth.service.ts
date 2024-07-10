@@ -18,16 +18,16 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
     );
   }
 
+  if (isExistUser.authentication?.oneTimeCode !== oneTimeCode) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'You provided wrong otp');
+  }
+
   const date = new Date();
-  if (date > isExistUser.authentication?.expireAt!) {
+  if (date > isExistUser.authentication?.expireAt) {
     throw new ApiError(
       StatusCodes.BAD_REQUEST,
       'Otp already expired, Please try again'
     );
-  }
-
-  if (isExistUser.authentication?.oneTimeCode !== oneTimeCode) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'You provided wrong otp');
   }
 
   await User.findOneAndUpdate(
