@@ -2,17 +2,17 @@ import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../../../shared/catchAsync';
 import { UserService } from './user.service';
 
-const createTeacher = catchAsync(
+const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { ...teacherData } = req.body;
-    const result = await UserService.createTeacherToDB(teacherData);
+    const { ...userData } = req.body;
+    const result = await UserService.createUserToDB(userData);
 
     res.status(200).json({
       success: true,
-      message: 'Teacher created successfully',
+      message: 'User created successfully',
       data: result,
     });
   }
 );
 
-export const UserController = { createTeacher };
+export const UserController = { createUser };

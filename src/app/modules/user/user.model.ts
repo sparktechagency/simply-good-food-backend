@@ -41,9 +41,46 @@ const userSchema = new Schema<IUser, UserModal>(
       type: String,
       default: 'https://i.ibb.co/z5YHLV9/profile.png',
     },
+    status: {
+      type: String,
+      enum: ['active', 'delete'],
+      default: 'active',
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    authentication: {
+      type: {
+        isResetPassword: {
+          type: Boolean,
+          default: false,
+        },
+        oneTimeCode: {
+          type: Number,
+          default: null,
+        },
+        expireAt: {
+          type: Date,
+          default: null,
+        },
+      },
+      select: 0,
+    },
   },
   { timestamps: true }
 );
+
+//exist user check
+userSchema.statics.isExistUserById = async (id: string) => {
+  const isExist = await User.findById(id);
+  return isExist;
+};
+
+userSchema.statics.isExistUserByEmail = async (email: string) => {
+  const isExist = await User.findOne({ email });
+  return isExist;
+};
 
 //check user
 userSchema.pre('save', async function (next) {

@@ -1,18 +1,40 @@
 import { StatusCodes } from 'http-status-codes';
 import { USER_ROLES } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
+import { emailHelper } from '../../../helpers/emailHelper';
+import { emailTemplate } from '../../../shared/emailTemplate';
+import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
 
-const createTeacherToDB = async (payload: Partial<IUser>): Promise<IUser> => {
+const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   //set role
-  payload.role = USER_ROLES.TEACHER;
-  const createTeacher = await User.create(payload);
-  if (!createTeacher) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create teacher');
+  payload.role = USER_ROLES.USER;
+  const createUser = await User.create(payload);
+  if (!createUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create user');
   }
 
-  return createTeacher;
+  //send email
+  const otp = generateOTP();
+  const values = {
+    otp: otp,
+    email: createUser.email!,
+  };
+  const createAccountTemplate = emailTemplate.createAccount(values);
+  emailHelper.sendEmail(createAccountTemplate);
+
+  //save to DB
+  const authentication = {
+    oneTimeCode: otp,
+    expireAt: new Date(Date.now() + 3 * 60000),
+  };
+  await User.findOneAndUpdate(
+    { _id: createUser._id },
+    { $set: { authentication } }
+  );
+
+  return createUser;
 };
 
-export const UserService = { createTeacherToDB };
+export const UserService = { createUserToDB };

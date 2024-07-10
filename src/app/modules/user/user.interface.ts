@@ -9,8 +9,16 @@ export type IUser = {
   password: string;
   location: string;
   profile?: string;
+  status: 'active' | 'delete';
+  verified: boolean;
+  authentication?: {
+    isResetPassword: boolean;
+    oneTimeCode: number;
+    expireAt: Date;
+  };
 };
 
 export type UserModal = {
-  isUserExist(id: string): IUser;
+  isExistUserById(id: string): IUser;
+  isExistUserByEmail(email: string): IUser;
 } & Model<IUser>;
