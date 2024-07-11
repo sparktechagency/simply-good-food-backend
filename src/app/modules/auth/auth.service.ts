@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
-import { IVerifyEmail } from '../../../types/auth';
+import { ILoginData, IVerifyEmail } from '../../../types/auth';
 import { User } from '../user/user.model';
 
 //verify email
@@ -35,6 +35,24 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
     { verified: true, authentication: { oneTimeCode: null, expireAt: null } }
   );
 };
+
+const loginUserFromDB = async (payload: ILoginData) => {
+  const { email, password } = payload;
+  const isExistUser = await User.isExistUserByEmail(email);
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  //check match password
+  if (
+    password &&
+    !(await User.isMatchPassword(password, isExistUser.password))
+  ) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
+  }
+};
+
 export const AuthService = {
   verifyEmailToDB,
+  loginUserFromDB,
 };

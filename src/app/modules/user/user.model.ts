@@ -82,6 +82,14 @@ userSchema.statics.isExistUserByEmail = async (email: string) => {
   return isExist;
 };
 
+//is match password
+userSchema.statics.isMatchPassword = async (
+  password: string,
+  hashPassword: string
+): Promise<boolean> => {
+  return await bcrypt.compare(password, hashPassword);
+};
+
 //check user
 userSchema.pre('save', async function (next) {
   //check user
