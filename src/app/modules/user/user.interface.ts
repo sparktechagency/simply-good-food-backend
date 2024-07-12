@@ -19,7 +19,7 @@ export type IUser = {
 };
 
 export type UserModal = {
-  isExistUserById(id: string): IUser;
-  isExistUserByEmail(email: string): IUser;
+  isExistUserById(id: string): any;
+  isExistUserByEmail(email: string): any;
   isMatchPassword(password: string, hashPassword: string): boolean;
 } & Model<IUser>;

@@ -1,0 +1,38 @@
+Fri Jul 12 2024 18:33:9 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "name"
+    ],
+    "message": "Name is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "contact"
+    ],
+    "message": "Contact is required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "body",
+      "location"
+    ],
+    "message": "Location is required"
+  }
+]
+Fri Jul 12 2024 18:34:22 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  Illegal arguments: string, undefined
+Fri Jul 12 2024 18:34:43 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  Illegal arguments: string, undefined
+Fri Jul 12 2024 18:38:48 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  Illegal arguments: string, undefined
+Fri Jul 12 2024 18:47:26 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  data and hash arguments required
+Fri Jul 12 2024 18:49:54 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  data and hash arguments required
+Fri Jul 12 2024 18:55:56 [SIMPLY-GOOD-FOOD] error: 🚨 globalErrorHandler ~~  Please verify your account, then try to login again

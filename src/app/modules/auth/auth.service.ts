@@ -1,5 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
+import { Secret } from 'jsonwebtoken';
+import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
+import { jwtHelper } from '../../../helpers/jwtHelper';
 import { ILoginData, IVerifyEmail } from '../../../types/auth';
 import { User } from '../user/user.model';
 
@@ -38,9 +41,25 @@ const verifyEmailToDB = async (payload: IVerifyEmail) => {
 
 const loginUserFromDB = async (payload: ILoginData) => {
   const { email, password } = payload;
-  const isExistUser = await User.isExistUserByEmail(email);
+  const isExistUser = await User.findOne({ email }).select('+password');
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  //check verified and status
+  if (!isExistUser.verified) {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'Please verify your account, then try to login again'
+    );
+  }
+
+  //check user status
+  if (isExistUser.status === 'delete') {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      'You don’t have permission to access this content.It looks like your account has been deactivated.'
+    );
   }
 
   //check match password
@@ -50,6 +69,15 @@ const loginUserFromDB = async (payload: ILoginData) => {
   ) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Password is incorrect!');
   }
+
+  //create token
+  const createToken = jwtHelper.createToken(
+    { id: isExistUser._id, role: isExistUser.role, email: isExistUser.email },
+    config.jwt.jwt_secret as Secret,
+    config.jwt.jwt_expire_in as string
+  );
+
+  return { createToken };
 };
 
 export const AuthService = {
