@@ -4,6 +4,7 @@ import { USER_ROLES } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
 import { emailHelper } from '../../../helpers/emailHelper';
 import { emailTemplate } from '../../../shared/emailTemplate';
+import unlinkFile from '../../../shared/unLinkFile';
 import generateOTP from '../../../util/generateOTP';
 import { IUser } from './user.interface';
 import { User } from './user.model';
@@ -19,6 +20,7 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   //send email
   const otp = generateOTP();
   const values = {
+    name: createUser.name,
     otp: otp,
     email: createUser.email!,
   };
@@ -50,4 +52,30 @@ const getUserProfileFromDB = async (
   return isExistUser;
 };
 
-export const UserService = { createUserToDB, getUserProfileFromDB };
+const updateProfileToDB = async (
+  user: JwtPayload,
+  payload: Partial<IUser>
+): Promise<Partial<IUser | null>> => {
+  const { id } = user;
+  const isExistUser = await User.isExistUserById(id);
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
+
+  //unlink file here
+  if (payload.profile) {
+    unlinkFile(isExistUser.profile);
+  }
+
+  const updateDoc = await User.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+
+  return updateDoc;
+};
+
+export const UserService = {
+  createUserToDB,
+  getUserProfileFromDB,
+  updateProfileToDB,
+};

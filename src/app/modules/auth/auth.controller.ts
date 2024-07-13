@@ -6,12 +6,13 @@ import { AuthService } from './auth.service';
 
 const verifyEmail = catchAsync(async (req: Request, res: Response) => {
   const { ...verifyData } = req.body;
-  await AuthService.verifyEmailToDB(verifyData);
+  const result = await AuthService.verifyEmailToDB(verifyData);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
-    message: 'Email verify successfully',
+    message: result.message,
+    data: result.data,
   });
 });
 
@@ -27,7 +28,20 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const forgetPassword = catchAsync(async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const result = await AuthService.forgetPasswordToDB(email);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Please check your email, we send a OTP!',
+    data: result,
+  });
+});
+
 export const AuthController = {
   verifyEmail,
   loginUser,
+  forgetPassword,
 };
