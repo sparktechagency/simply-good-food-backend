@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { IResetToken } from './resetToken.interface';
+import { IResetToken, ResetTokenModel } from './resetToken.interface';
 
-const resetTokenSchema = new Schema<IResetToken>(
+const resetTokenSchema = new Schema<IResetToken, ResetTokenModel>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -19,4 +19,24 @@ const resetTokenSchema = new Schema<IResetToken>(
   { timestamps: true }
 );
 
-export const ResetToken = model<IResetToken>('Token', resetTokenSchema);
+//token check
+resetTokenSchema.statics.isExistToken = async (
+  token: string
+): Promise<IResetToken | null> => {
+  return await ResetToken.findOne({ token });
+};
+
+//token validity check
+resetTokenSchema.statics.isExpireToken = async (token: string) => {
+  const currentDate = new Date();
+  const resetToken = await ResetToken.findOne({
+    token,
+    expireAt: { $gt: currentDate },
+  });
+  return !!resetToken;
+};
+
+export const ResetToken = model<IResetToken, ResetTokenModel>(
+  'Token',
+  resetTokenSchema
+);
