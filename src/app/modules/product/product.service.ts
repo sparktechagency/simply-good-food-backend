@@ -42,11 +42,14 @@ const getAllProductFromDB = async (
     });
   }
 
-  const result = await Product.find()
+  const whereConditions =
+    andConditions.length > 0 ? { $and: andConditions } : {};
+
+  const result = await Product.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
-  const total = await Product.countDocuments();
+  const total = await Product.countDocuments(whereConditions);
   const totalPage = Math.ceil(total / limit);
 
   return {
