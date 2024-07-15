@@ -3,6 +3,7 @@ import { SortOrder } from 'mongoose';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelper } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../shared/genericResponse';
+import unlinkFile from '../../../shared/unlinkFile';
 import { IPaginationOptions } from '../../../types/pagination';
 import { IFilterOptions, IProduct } from './product.interface';
 import { Product } from './product.model';
@@ -21,7 +22,7 @@ const getAllProductFromDB = async (
 ): Promise<IGenericResponse<IProduct[]>> => {
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOptions);
-  const { searchTerm, ...othersFilter } = filterOptions;
+  const { searchTerm, ...filterData } = filterOptions;
 
   const andConditions = [];
   let sortConditions: { [key: string]: SortOrder } = {};
@@ -39,6 +40,14 @@ const getAllProductFromDB = async (
           },
         })
       ),
+    });
+  }
+
+  if (Object.keys(filterData).length) {
+    andConditions.push({
+      $and: Object.entries(filterData).map(([field, value]) => ({
+        [field]: value,
+      })),
     });
   }
 
@@ -68,8 +77,43 @@ const getSingleProductFromDB = async (id: string): Promise<IProduct | null> => {
   return result;
 };
 
+const updateProductToDB = async (
+  id: string,
+  payload: IProduct
+): Promise<IProduct | null> => {
+  const isExistProduct = await Product.findById(id);
+  if (!isExistProduct) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Product doesn't exist");
+  }
+
+  if (payload.image) {
+    unlinkFile(isExistProduct.image);
+  }
+
+  const result = await Product.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return result;
+};
+
+const deleteProductToDB = async (id: string): Promise<IProduct | null> => {
+  const isExistProduct = await Product.findById(id);
+  if (!isExistProduct) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Product doesn't exist!");
+  }
+
+  const result = await Product.findByIdAndDelete(id);
+
+  //unlink file
+  unlinkFile(result?.image!);
+
+  return result;
+};
+
 export const ProductService = {
   createProductToDB,
   getAllProductFromDB,
   getSingleProductFromDB,
+  updateProductToDB,
+  deleteProductToDB,
 };
