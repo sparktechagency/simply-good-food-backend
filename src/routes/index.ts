@@ -1,5 +1,6 @@
 import express from 'express';
 import { AuthRoutes } from '../app/modules/auth/auth.route';
+import { FeedbackRoutes } from '../app/modules/feedback/feedback.route';
 import { ProductRoutes } from '../app/modules/product/product.route';
 import { UserRoutes } from '../app/modules/user/user.route';
 const router = express.Router();
@@ -16,6 +17,10 @@ const apiRoutes = [
   {
     path: '/products',
     route: ProductRoutes,
+  },
+  {
+    path: '/feedback',
+    route: FeedbackRoutes,
   },
 ];
 
