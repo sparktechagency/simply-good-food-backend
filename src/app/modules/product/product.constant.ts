@@ -1,4 +1,4 @@
-export const menus = ['Full menus', 'Entree', 'Breakfast', 'Snacks'];
+export const menus = ['Full Menus', 'Entree', 'Breakfast', 'Snacks'];
 export const mealPlans = [
   'Small Meal',
   'Small Paleo Meal',

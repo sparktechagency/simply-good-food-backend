@@ -72,6 +72,44 @@ const getAllProductFromDB = async (
   };
 };
 
+const getRelatedProductFromDB = async (
+  id: string,
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IProduct[]>> => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions);
+
+  let sortConditions: { [key: string]: SortOrder } = {};
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
+  const isExistProduct = await Product.findById(id);
+  console.log(isExistProduct);
+  if (!isExistProduct) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Product not found!');
+  }
+
+  const result = await Product.find({
+    _id: { $ne: id },
+    menu: isExistProduct.menu,
+  })
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit);
+  const total = await Product.countDocuments();
+  const totalPage = Math.ceil(total / limit);
+
+  return {
+    meta: {
+      page,
+      limit,
+      totalPage,
+      total,
+    },
+    data: result,
+  };
+};
+
 const getSingleProductFromDB = async (id: string): Promise<IProduct | null> => {
   const result = await Product.findById(id);
   return result;
@@ -116,4 +154,5 @@ export const ProductService = {
   getSingleProductFromDB,
   updateProductToDB,
   deleteProductToDB,
+  getRelatedProductFromDB,
 };

@@ -19,6 +19,8 @@ router.post(
   }
 );
 
+router.get('/related/:id', ProductController.getRelatedProduct);
+
 router
   .route('/:id')
   .get(ProductController.getSingleProduct)

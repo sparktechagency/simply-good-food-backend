@@ -10,7 +10,7 @@ export type IProduct = {
   details: string;
   ingredient: string;
   instructions: string;
-  menu: 'Full menus' | 'Entree' | 'Breakfast' | 'Snacks';
+  menu: 'Full Menus' | 'Entree' | 'Breakfast' | 'Snacks';
   mealPlan:
     | 'Small Meal'
     | 'Small Paleo Meal'

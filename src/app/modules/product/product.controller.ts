@@ -42,6 +42,23 @@ const getAllProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getRelatedProduct = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const paginationOptions = pick(req.query, paginationFields);
+  const result = await ProductService.getRelatedProductFromDB(
+    id,
+    paginationOptions
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Related Product retrieved successfully',
+    pagination: result.meta,
+    data: result.data,
+  });
+});
+
 const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const result = await ProductService.getSingleProductFromDB(id);
@@ -92,4 +109,5 @@ export const ProductController = {
   getSingleProduct,
   updateProduct,
   deleteProduct,
+  getRelatedProduct,
 };
