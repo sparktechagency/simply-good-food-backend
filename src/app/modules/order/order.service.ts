@@ -16,7 +16,22 @@ const getAllOrdersFromDB = async () => {
   return result;
 };
 
+const updateOrderStatusToDB = async (
+  id: string,
+  payload: { status: string }
+) => {
+  const isExistOrder = await Order.findById(id);
+  if (!isExistOrder) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "Order doesn't exist!");
+  }
+  const updateDoc = await Order.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
+  return updateDoc;
+};
+
 export const OrderService = {
   createOrderToDB,
   getAllOrdersFromDB,
+  updateOrderStatusToDB,
 };

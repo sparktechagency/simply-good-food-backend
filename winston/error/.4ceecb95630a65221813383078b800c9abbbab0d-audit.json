@@ -6,31 +6,6 @@
     "auditLog": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\.4ceecb95630a65221813383078b800c9abbbab0d-audit.json",
     "files": [
         {
-            "date": 1722482922025,
-            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-09-error.log",
-            "hash": "ae2cced8752cac0a3659d1b8f44b26e2f0a90526adf2ba4691452a659cd738bb"
-        },
-        {
-            "date": 1722489122306,
-            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-11-error.log",
-            "hash": "7fa0b443db4ca182367dcf5ee7f5342d07a7c0025626c7d42bce53a522efb8f4"
-        },
-        {
-            "date": 1722493767236,
-            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-12-error.log",
-            "hash": "2525058b8c3bca873c18385d01d2703bb608e790d8106ed22649bcd49ab45eb6"
-        },
-        {
-            "date": 1722502351173,
-            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-14-error.log",
-            "hash": "f74794c1748b7b42e58ccb31011f27e5d2ad541cf4f9fba01abfa4afb84e3934"
-        },
-        {
-            "date": 1722507309780,
-            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-16-error.log",
-            "hash": "ce0dbabb2f16904f39333a6e046169375baec7f5e4eeaa57cea3587f4c5187ba"
-        },
-        {
             "date": 1722510757084,
             "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-17-error.log",
             "hash": "0a152e4a4595f6b03b7309b041bfb5da233728e32eaaec0bb0714b5cc636dc3a"
@@ -39,6 +14,21 @@
             "date": 1722514044017,
             "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\01-08-2024-18-error.log",
             "hash": "ae4de0a0182b695e75f61ef28584d4068f029d1fa9cb5ede084441b43e23d3e4"
+        },
+        {
+            "date": 1722573341715,
+            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\02-08-2024-10-error.log",
+            "hash": "81983df526bb9c1c3bf7a89045fed3d07d45616d23ecedfdd8fc186d1c25fc72"
+        },
+        {
+            "date": 1722574862624,
+            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\02-08-2024-11-error.log",
+            "hash": "8a02c67ae289d1a92ec0f3b43f3a5e2a94bdd477486de40dd09bb1a922da5992"
+        },
+        {
+            "date": 1722596231517,
+            "name": "D:\\Fahim\\Bdcalling\\Backend\\simply-good-food-backend\\winston\\error\\02-08-2024-16-error.log",
+            "hash": "280e7115403d1e480e5fc7df31151ba742e58e2c638f1ba49c79df9ba395945a"
         }
     ],
     "hashType": "sha256"

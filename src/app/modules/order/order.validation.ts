@@ -9,6 +9,7 @@ const createOrderZodSchema = z.object({
       .nonempty({ message: 'Product can not be an empty!' }),
     price: z.number({ required_error: 'Price is required' }),
     totalItems: z.number({ required_error: 'Total items is required' }),
+    location: z.string().optional(),
     trxId: z.string().optional(),
     deliveryCharge: z.number().optional(),
     status: z.string().optional(),

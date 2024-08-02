@@ -6,6 +6,12 @@ import { OrderController } from './order.controller';
 import { OrderValidation } from './order.validation';
 const router = express.Router();
 
+router.patch(
+  '/status-update/:id',
+  auth(USER_ROLES.ADMIN),
+  OrderController.updateOrderStatus
+);
+
 router
   .route('/')
   .get(auth(USER_ROLES.ADMIN), OrderController.getAllOrders)
