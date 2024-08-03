@@ -24,6 +24,13 @@ const updateOrderStatusToDB = async (
   if (!isExistOrder) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "Order doesn't exist!");
   }
+  if (isExistOrder.status === 'delivered') {
+    throw new ApiError(
+      StatusCodes.BAD_REQUEST,
+      `The order cannot be modified because it is already delivered!`
+    );
+  }
+
   const updateDoc = await Order.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });

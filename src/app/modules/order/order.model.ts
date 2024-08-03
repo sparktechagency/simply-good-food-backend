@@ -36,6 +36,9 @@ const orderSchema = new Schema<IOrder>(
     deliveryCharge: {
       type: Number,
     },
+    location: {
+      type: String,
+    },
     trxId: {
       type: String,
     },
