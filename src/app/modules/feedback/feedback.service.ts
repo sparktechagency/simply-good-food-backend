@@ -57,8 +57,42 @@ const getAllFeedbackFromDB = async (
   };
 };
 
+const getAllPublishFeedbackFromDB = async (
+  paginationOptions: IPaginationOptions
+): Promise<IGenericResponse<IFeedback[]>> => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions);
+
+  const sortConditions: { [key: string]: SortValues } = {};
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder;
+  }
+
+  const result = await Feedback.find({ status: 'publish' })
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit)
+    .populate('user');
+
+  console.log(result);
+
+  const total = await Feedback.countDocuments({ status: 'publish' });
+  const totalPage = Math.ceil(total / limit);
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage,
+    },
+    data: result,
+  };
+};
+
 export const FeedbackService = {
   createFeedbackToDB,
   feedbackStatusUpdateToDB,
   getAllFeedbackFromDB,
+  getAllPublishFeedbackFromDB,
 };

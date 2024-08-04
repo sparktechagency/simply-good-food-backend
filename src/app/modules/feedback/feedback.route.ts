@@ -10,6 +10,8 @@ router.patch(
   FeedbackController.feedbackStatusUpdate
 );
 
+router.get('/publish', FeedbackController.getAllPublishFeedback);
+
 router
   .route('/')
   .get(auth(USER_ROLES.ADMIN), FeedbackController.getAllFeedback)

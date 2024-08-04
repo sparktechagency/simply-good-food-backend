@@ -11,10 +11,12 @@ const createProduct = catchAsync(async (req: Request, res: Response) => {
   if (req.files && 'image' in req.files && req.files.image[0]) {
     image = `/images/${req.files.image[0].filename}`;
   }
+
   const value = {
     image,
     ...req.body,
   };
+
   const result = await ProductService.createProductToDB(value);
 
   sendResponse(res, {

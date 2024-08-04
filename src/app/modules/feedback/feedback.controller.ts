@@ -52,8 +52,26 @@ const getAllFeedback = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllPublishFeedback = catchAsync(
+  async (req: Request, res: Response) => {
+    const paginationOptions = pick(req.query, paginationFields);
+    const result = await FeedbackService.getAllPublishFeedbackFromDB(
+      paginationOptions
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'All Feedback retrieved successfully',
+      pagination: result.meta,
+      data: result.data,
+    });
+  }
+);
+
 export const FeedbackController = {
   createFeedback,
   feedbackStatusUpdate,
   getAllFeedback,
+  getAllPublishFeedback,
 };
