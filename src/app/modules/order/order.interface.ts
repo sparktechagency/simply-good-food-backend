@@ -6,8 +6,8 @@ export type IOrder = {
   price: number;
   totalItems: number;
   location?: string;
-  trxId?: string;
-  deliveryCharge?: number;
+  trxId: string;
+  deliveryCharge: number;
   status: 'pending' | 'packing' | 'shipping' | 'delivered';
 };
 

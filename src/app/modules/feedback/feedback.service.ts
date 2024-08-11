@@ -43,7 +43,8 @@ const getAllFeedbackFromDB = async (
   const result = await Feedback.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .populate('user');
   const total = await Feedback.countDocuments(whereConditions);
   const totalPage = Math.ceil(total / limit);
   return {
@@ -73,8 +74,6 @@ const getAllPublishFeedbackFromDB = async (
     .skip(skip)
     .limit(limit)
     .populate('user');
-
-  console.log(result);
 
   const total = await Feedback.countDocuments({ status: 'publish' });
   const totalPage = Math.ceil(total / limit);

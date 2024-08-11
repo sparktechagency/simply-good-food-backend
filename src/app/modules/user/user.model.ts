@@ -67,6 +67,12 @@ const userSchema = new Schema<IUser, UserModal>(
       },
       select: 0,
     },
+    coupons: {
+      type: [Schema.Types.ObjectId],
+      ref: 'Coupon',
+      default: [],
+      select: 0,
+    },
   },
   { timestamps: true }
 );

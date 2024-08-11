@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose';
-import { IOrder, OrderModel } from './order.interface';
+import { IMealPlanOrder, MealPlanOrderModel } from './mealPlanOrder.interface';
 
-const orderSchema = new Schema<IOrder>(
+const mealPlanOrderSchema = new Schema<IMealPlanOrder, MealPlanOrderModel>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -16,14 +16,26 @@ const orderSchema = new Schema<IOrder>(
             ref: 'Product',
             required: true,
           },
-          quantity: {
-            type: Number,
-            required: true,
-            default: 1,
-          },
         },
       ],
       required: true,
+    },
+    mealPlanType: {
+      type: String,
+      enum: [
+        'Small Meal',
+        'Small Paleo Meal',
+        'Medium Meal',
+        'Medium Paleo Meal',
+        'Large Meal',
+        'Large Paleo Meal',
+      ],
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      default: 1,
     },
     price: {
       type: Number,
@@ -53,4 +65,7 @@ const orderSchema = new Schema<IOrder>(
   { timestamps: true }
 );
 
-export const Order = model<IOrder, OrderModel>('Order', orderSchema);
+export const MealPlanOrder = model<IMealPlanOrder, MealPlanOrderModel>(
+  'MealPlanOrder',
+  mealPlanOrderSchema
+);
