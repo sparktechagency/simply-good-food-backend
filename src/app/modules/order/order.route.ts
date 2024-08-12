@@ -19,6 +19,8 @@ router.patch(
   OrderController.updateOrderStatus
 );
 
+router.get('/history', auth(USER_ROLES.USER), OrderController.getOrderHistory);
+
 //apply promo code
 router.post(
   '/apply-promo-code',

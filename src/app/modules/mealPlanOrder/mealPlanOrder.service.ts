@@ -1,5 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
+import { JwtPayload } from 'jsonwebtoken';
 import ApiError from '../../../errors/ApiError';
+import { paginationHelper } from '../../../helpers/paginationHelper';
+import { IPaginationOptions } from '../../../types/pagination';
 import { IMealPlanOrder } from './mealPlanOrder.interface';
 import { MealPlanOrder } from './mealPlanOrder.model';
 
@@ -11,8 +14,37 @@ const createMealPlanOrderToDB = async (payload: IMealPlanOrder) => {
   return createMealPlanOrder;
 };
 
-const getAllMealPlanOrdersFromDB = async () => {
-  const result = await MealPlanOrder.find();
+const getAllMealPlanOrdersFromDB = async (
+  paginationOptions: IPaginationOptions
+) => {
+  const { skip, limit, page } =
+    paginationHelper.calculatePagination(paginationOptions);
+
+  const result = await MealPlanOrder.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate([
+      { path: 'user', select: 'name profile' },
+      { path: 'products.product', select: 'name image price' },
+    ]);
+  const total = await MealPlanOrder.countDocuments();
+
+  return {
+    meta: {
+      limit,
+      page,
+      total,
+    },
+    data: result,
+  };
+};
+
+const getOrderHistoryFromDB = async (user: JwtPayload) => {
+  const result = await MealPlanOrder.find({ user: user.id }).populate(
+    'products.product',
+    'name image price'
+  );
   return result;
 };
 
@@ -41,4 +73,5 @@ export const MealPlanOrderService = {
   createMealPlanOrderToDB,
   getAllMealPlanOrdersFromDB,
   updateMealPlanOrderStatusToDB,
+  getOrderHistoryFromDB,
 };

@@ -12,6 +12,12 @@ router.patch(
   MealPlanOrderController.updateMealPlanOrderStatus
 );
 
+router.get(
+  '/history',
+  auth(USER_ROLES.USER),
+  MealPlanOrderController.getOrderHistory
+);
+
 router
   .route('/')
   .get(auth(USER_ROLES.ADMIN), MealPlanOrderController.getAllMealPlanOrders)

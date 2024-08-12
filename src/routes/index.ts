@@ -1,6 +1,7 @@
 import express from 'express';
 import { AuthRoutes } from '../app/modules/auth/auth.route';
 import { CouponRoutes } from '../app/modules/coupon/coupon.route';
+import { DeliveryChargeRoutes } from '../app/modules/deliveryCharge/deliveryCharge.route';
 import { FeedbackRoutes } from '../app/modules/feedback/feedback.route';
 import { MealPlanOrderRoutes } from '../app/modules/mealPlanOrder/mealPlanOrder.route';
 import { OrderRoutes } from '../app/modules/order/order.route';
@@ -36,6 +37,10 @@ const apiRoutes = [
   {
     path: '/coupon',
     route: CouponRoutes,
+  },
+  {
+    path: '/delivery-charge',
+    route: DeliveryChargeRoutes,
   },
 ];
 

@@ -7,7 +7,7 @@ type IData<T> = {
   pagination?: {
     page: number;
     limit: number;
-    totalPage: number;
+    totalPage?: number;
     total: number;
   };
   data?: T;

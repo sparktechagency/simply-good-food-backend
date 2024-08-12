@@ -1,6 +1,8 @@
 import { StatusCodes } from 'http-status-codes';
 import { JwtPayload } from 'jsonwebtoken';
 import ApiError from '../../../errors/ApiError';
+import { paginationHelper } from '../../../helpers/paginationHelper';
+import { IPaginationOptions } from '../../../types/pagination';
 import { Coupon } from '../coupon/coupon.model';
 import { User } from '../user/user.model';
 import { IOrder } from './order.interface';
@@ -14,8 +16,34 @@ const createOrderToDB = async (payload: IOrder) => {
   return createOrder;
 };
 
-const getAllOrdersFromDB = async () => {
-  const result = await Order.find();
+const getAllOrdersFromDB = async (paginationOptions: IPaginationOptions) => {
+  const { skip, limit, page } =
+    paginationHelper.calculatePagination(paginationOptions);
+  const result = await Order.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate([
+      { path: 'user', select: 'name profile' },
+      { path: 'products.product', select: 'name image price' },
+    ]);
+  const total = await Order.countDocuments();
+
+  return {
+    meta: {
+      limit,
+      page,
+      total,
+    },
+    data: result,
+  };
+};
+
+const getOrderHistoryFromDB = async (user: JwtPayload) => {
+  const result = await Order.find({ user: user.id }).populate(
+    'products.product',
+    'name image price'
+  );
   return result;
 };
 
@@ -43,7 +71,7 @@ const updateOrderStatusToDB = async (
 //apply promo code
 const applyPromoCodeToDB = async (payload: string, user: JwtPayload) => {
   //user check
-  const isExistUser = await User.findById(user.id);
+  const isExistUser = await User.findById(user.id).select('coupons');
   if (!isExistUser) {
     throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
   }
@@ -64,8 +92,11 @@ const applyPromoCodeToDB = async (payload: string, user: JwtPayload) => {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'The coupon already expired');
   }
 
-  isExistUser.coupons.push(isExistCoupon._id);
-  await isExistUser.save();
+  //coupons save
+  await User.findOneAndUpdate(
+    { _id: user.id },
+    { $push: { coupons: isExistCoupon._id } }
+  );
 
   return {
     discount: isExistCoupon.couponDiscount,
@@ -77,4 +108,5 @@ export const OrderService = {
   getAllOrdersFromDB,
   updateOrderStatusToDB,
   applyPromoCodeToDB,
+  getOrderHistoryFromDB,
 };

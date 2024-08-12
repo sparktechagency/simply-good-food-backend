@@ -4,6 +4,8 @@ import Stripe from 'stripe';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import catchAsync from '../../../shared/catchAsync';
+import { paginationFields } from '../../../shared/constrant';
+import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { OrderService } from './order.service';
 const stripe = new Stripe(config.stripe_secret_key as string);
@@ -26,13 +28,15 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllOrders = catchAsync(async (req: Request, res: Response) => {
-  const result = await OrderService.getAllOrdersFromDB();
+  const paginationOptions = pick(req.query, paginationFields);
+  const result = await OrderService.getAllOrdersFromDB(paginationOptions);
 
   sendResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'Order retrieved successfully',
-    data: result,
+    pagination: result.meta,
+    data: result.data,
   });
 });
 
@@ -45,6 +49,19 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'Order status update successfully',
+    data: result,
+  });
+});
+
+//apply promo code
+const getOrderHistory = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user;
+  const result = await OrderService.getOrderHistoryFromDB(user);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Order history retrieved successfully',
     data: result,
   });
 });
@@ -93,4 +110,5 @@ export const OrderController = {
   updateOrderStatus,
   createPaymentIntent,
   applyPromoCode,
+  getOrderHistory,
 };

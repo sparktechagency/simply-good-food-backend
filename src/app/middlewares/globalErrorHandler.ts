@@ -12,8 +12,6 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
     ? console.log('🚨 globalErrorHandler ~~ ', error)
     : errorLogger.error('🚨 globalErrorHandler ~~ ', error);
 
-  console.log(error.name);
-
   let statusCode = 500;
   let message = 'Something went wrong';
   let errorMessages: IErrorMessage[] = [];
