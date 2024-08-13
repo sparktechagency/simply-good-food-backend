@@ -10,7 +10,10 @@ router
     auth(USER_ROLES.ADMIN, USER_ROLES.USER),
     DeliveryController.getDeliveryCharge
   )
-  .post(auth(USER_ROLES.ADMIN), DeliveryController.createDeliveryCharge)
+  .post(auth(USER_ROLES.ADMIN), DeliveryController.createDeliveryCharge);
+
+router
+  .route('/:id')
   .patch(auth(USER_ROLES.ADMIN), DeliveryController.updateDeliveryCharge)
   .delete(auth(USER_ROLES.ADMIN), DeliveryController.deleteDeliveryCharge);
 

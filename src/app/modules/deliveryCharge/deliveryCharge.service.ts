@@ -23,8 +23,8 @@ const updateDeliveryChargeToDB = async (
   return createCharge;
 };
 
-const deleteDeliveryChargeToDB = async () => {
-  const createCharge = await DeliveryCharge.deleteOne();
+const deleteDeliveryChargeToDB = async (id: string) => {
+  const createCharge = await DeliveryCharge.findByIdAndDelete(id);
   return createCharge;
 };
 

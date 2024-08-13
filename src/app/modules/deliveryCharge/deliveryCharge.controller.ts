@@ -43,7 +43,8 @@ const updateDeliveryCharge = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteDeliveryCharge = catchAsync(async (req: Request, res: Response) => {
-  const result = await DeliveryService.deleteDeliveryChargeToDB();
+  const id = req.params.id;
+  const result = await DeliveryService.deleteDeliveryChargeToDB(id);
 
   sendResponse(res, {
     success: true,
