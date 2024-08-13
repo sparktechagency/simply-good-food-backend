@@ -12,6 +12,7 @@ router
   )
   .post(auth(USER_ROLES.ADMIN), DeliveryController.createDeliveryCharge);
 
+//update
 router
   .route('/:id')
   .patch(auth(USER_ROLES.ADMIN), DeliveryController.updateDeliveryCharge)
