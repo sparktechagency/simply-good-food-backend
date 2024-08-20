@@ -40,6 +40,18 @@ const createUserToDB = async (payload: Partial<IUser>): Promise<IUser> => {
   return createUser;
 };
 
+const createAdminToDB = async (payload: Partial<IUser>): Promise<IUser> => {
+  //set role
+  payload.role = USER_ROLES.ADMIN;
+  payload.verified = true;
+  const createUser = await User.create(payload);
+  if (!createUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to create admin');
+  }
+
+  return createUser;
+};
+
 const getUserProfileFromDB = async (
   user: JwtPayload
 ): Promise<Partial<IUser>> => {
@@ -78,4 +90,5 @@ export const UserService = {
   createUserToDB,
   getUserProfileFromDB,
   updateProfileToDB,
+  createAdminToDB,
 };

@@ -18,6 +18,20 @@ const createUser = catchAsync(
   }
 );
 
+const createAdmin = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { ...userData } = req.body;
+    const result = await UserService.createAdminToDB(userData);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'Admin created successfully',
+      data: result,
+    });
+  }
+);
+
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
   const user = req.user;
   const result = await UserService.getUserProfileFromDB(user);
@@ -55,4 +69,9 @@ const updateProfile = catchAsync(
   }
 );
 
-export const UserController = { createUser, getUserProfile, updateProfile };
+export const UserController = {
+  createUser,
+  getUserProfile,
+  updateProfile,
+  createAdmin,
+};

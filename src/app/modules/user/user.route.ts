@@ -13,6 +13,8 @@ router.get(
   UserController.getUserProfile
 );
 
+router.post('/create-admin', UserController.createAdmin);
+
 router
   .route('/')
   .post(
